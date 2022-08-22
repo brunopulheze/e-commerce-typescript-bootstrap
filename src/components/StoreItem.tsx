@@ -18,7 +18,7 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
                 <Card.Img
                     className="hover transition"
                     variant="top"
-                    src={imgUrl}
+                    src={process.env.PUBLIC_URL + imgUrl}
                     height="400px"
                     style={{ objectFit: "cover", }}
                 />
