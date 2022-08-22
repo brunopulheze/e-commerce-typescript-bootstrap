@@ -74,7 +74,7 @@ export function Navbar() {
 
             {sticky ? (
                 <div className="w-100 bg-white sticky shadow-sm">
-                    <Container className="d-flex justify-content-between py-3">
+                    <Container className="d-flex justify-content-between">
                         <Nav>
                             <Nav.Link to={"/"} as={NavLink} className='text-muted d-none d-sm-block'>
                                 Store
@@ -150,7 +150,7 @@ export function Navbar() {
             ) : null}
 
             <div className="w-100 bg-white">
-                <Container className="d-flex justify-content-between py-3">
+                <Container className="d-flex justify-content-between align-items-center">
                     <Nav>
                         <Nav.Link to={"/"} as={NavLink} className='text-muted d-none d-sm-block'>
                             Store

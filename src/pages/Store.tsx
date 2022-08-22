@@ -4,7 +4,7 @@ import storeItems from "../data/items.json"
 
 export function Store() {
     return (
-        <section style={{ marginBottom: "10rem" }}>
+        <section className="fade-in" style={{ marginBottom: "10rem" }}>
             <Container>
                 <div className="text-center my-5">
                     <h1 className="display-4">Cosmetics</h1>
