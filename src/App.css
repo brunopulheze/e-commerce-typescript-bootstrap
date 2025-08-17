@@ -41,3 +41,10 @@
     top: 0;
   }
 }
+
+.custom-width {
+  max-width: 900px;
+  margin: 0 auto;
+  /* Center the container */
+  /* or whatever width you want */
+}

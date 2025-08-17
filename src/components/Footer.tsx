@@ -6,8 +6,8 @@ const year = new Date().getFullYear();
 export function Footer() {
     return (
         <footer className="bg-secondary text-dark bg-opacity-10 py-5">
-            <Container className="d-flex justify-content-between py-5">
-                <div className="">
+            <Container className="d-flex flex-column align-items-center">
+                <div className="mb-4">
                     <img src={logo} alt="" />
                 </div>
                 <div className="">

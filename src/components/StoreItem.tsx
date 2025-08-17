@@ -14,12 +14,12 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
     const quantity = getItemQuantity(id)
     return (
         <Card className="h-100">
-            <div className="overflow-hidden" style={{ height: '400px' }}>
+            <div className="overflow-hidden" style={{ height: '180px' }}>
                 <Card.Img
                     className="hover transition"
                     variant="top"
                     src={process.env.PUBLIC_URL + imgUrl}
-                    height="400px"
+                    height="180px"
                     style={{ objectFit: "cover", }}
                 />
             </div>

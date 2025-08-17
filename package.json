@@ -1,5 +1,4 @@
 {
-  "homepage": "http://brunopulheze.github.io/e-commerce-typescript-bootstrap",
   "name": "e-commerce-react-typescript",
   "version": "0.1.0",
   "private": true,
@@ -11,6 +10,7 @@
     "@types/node": "^16.11.52",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "axios": "^1.11.0",
     "bootstrap": "^5.2.0",
     "gh-pages": "^4.0.0",
     "react": "^18.2.0",
