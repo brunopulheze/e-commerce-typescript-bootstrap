@@ -12,5 +12,5 @@ export const register = async (user: {
 
 export const login = async (email: string, password: string) => {
     const response = await api.post("/login", { email, password });
-    return response.data; // Contains access_token
+    return response.data; // response.data now contains access_token, token_type, user
 };

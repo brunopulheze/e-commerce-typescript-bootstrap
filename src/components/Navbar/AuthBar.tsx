@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button, Form } from "react-bootstrap"
-import { login as apiLogin, register as apiRegister } from "../../api/auth"
+import { useAuth } from "../../context/AuthContext"
 
 interface UserInfo {
     name: string
@@ -21,12 +21,19 @@ export function AuthBar() {
     const [registerSuccess, setRegisterSuccess] = useState(false)
     const [user, setUser] = useState<UserInfo | null>(null)
 
+    const { token, isLoggedIn, login, logout } = useAuth()
+
+    // Manage user info in AuthBar (name/email)
     useEffect(() => {
-        const token = localStorage.getItem("token")
-        const name = localStorage.getItem("name")
-        const email = localStorage.getItem("email")
-        if (token && email && name) setUser({ name, email })
-    }, [])
+        if (isLoggedIn) {
+            const name = localStorage.getItem("name")
+            const email = localStorage.getItem("email")
+            if (name && email) setUser({ name, email })
+            else if (email) setUser({ name: email.split('@')[0], email }) // fallback
+        } else {
+            setUser(null)
+        }
+    }, [isLoggedIn])
 
     const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setLoginForm({ ...loginForm, [e.target.name]: e.target.value })
@@ -36,31 +43,28 @@ export function AuthBar() {
     }
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoginError("")
+        e.preventDefault();
+        setLoginError("");
         try {
-            // Optionally, you can get the user's name from a /me endpoint after login
-            const { access_token, user } = await apiLogin(loginForm.email, loginForm.password)
-            localStorage.setItem("token", access_token)
-            localStorage.setItem("email", loginForm.email)
-            if (user && user.name) {
-                localStorage.setItem("name", user.name)
-                setUser({ name: user.name, email: loginForm.email })
-            } else {
-                setUser({ name: loginForm.email.split('@')[0], email: loginForm.email }) // fallback
-            }
-            setLoginForm({ email: "", password: "" })
+            // Context login now saves user info in localStorage
+            await login(loginForm.email, loginForm.password);
+            // Read user info from localStorage
+            const name = localStorage.getItem("name") || loginForm.email.split('@')[0];
+            setUser({ name, email: loginForm.email });
+            setLoginForm({ email: "", password: "" });
         } catch (err: any) {
-            setLoginError(err?.response?.data?.detail || "Login failed.")
+            setLoginError(err?.response?.data?.detail || "Login failed.");
         }
-    }
+    };
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
         setRegisterError("")
         setRegisterSuccess(false)
         try {
-            await apiRegister(registerForm)
+            // registerForm has name, email, password, address
+            const register = (await import("../../api/auth")).register
+            await register(registerForm)
             setRegisterSuccess(true)
             setShowRegister(false)
             setRegisterForm({ name: "", email: "", password: "", address: "" })
@@ -71,7 +75,7 @@ export function AuthBar() {
     }
 
     const handleLogout = () => {
-        localStorage.removeItem("token")
+        logout()
         localStorage.removeItem("email")
         localStorage.removeItem("name")
         setUser(null)
@@ -80,7 +84,7 @@ export function AuthBar() {
     return (
         <div className="w-100" style={{ backgroundColor: "#f7d7da" }}>
             <div className="custom-width d-flex justify-content-center align-items-center my-2" style={{ gap: "1rem", flexWrap: "wrap" }}>
-                {user ? (
+                {isLoggedIn && user ? (
                     <>
                         <span>Welcome, {capitalizeName(user.name)}</span>
                         <Button variant="outline-secondary" size="sm" onClick={handleLogout}>Logout</Button>

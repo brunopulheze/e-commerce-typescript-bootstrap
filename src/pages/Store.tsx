@@ -1,19 +1,42 @@
+import { useEffect, useState, useCallback } from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import { StoreItem } from "../components/StoreItem"
-import storeItems from "../data/items.json"
-import "../App.css"
+import api from "../api/axios"
+import { useShoppingCart } from "../context/ShoppingCartContext"
+
+type StoreItemType = {
+    id: string
+    name: string
+    price: number
+    imgUrl: string
+    description: string
+    stock: number
+    category: string
+}
 
 export function Store() {
+    const [storeItems, setStoreItems] = useState<StoreItemType[]>([])
+    const { onStoreCheckout } = useShoppingCart()
+
+    const fetchProducts = useCallback(() => {
+        api.get("/products").then(res => setStoreItems(res.data))
+    }, [])
+
+    useEffect(() => {
+        fetchProducts()
+    }, [fetchProducts])
+
+    useEffect(() => {
+        if (onStoreCheckout) {
+            onStoreCheckout(fetchProducts)
+        }
+    }, [onStoreCheckout, fetchProducts])
+
     return (
-        <section className="fade-in custom-width" style={{ marginBottom: "10rem" }}>
+        <section className="fade-in custom-width" style={{ marginBottom: "6rem" }}>
             <Container className="custom-width">
                 <div className="text-center mt-2 mb-4">
                     <h1 className="display-4">Cosmetics</h1>
-                    {/* <p className="fw-semilight">
-                        What’s new in the world of beauty?
-                        <br />
-                        We’re so glad you asked.
-                    </p> */}
                 </div>
             </Container>
             <Row md={2} xs={1} lg={3} className="g-5">
