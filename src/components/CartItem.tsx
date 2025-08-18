@@ -32,7 +32,7 @@ export function CartItem({ product_id, quantity }: CartItemProps) {
     return (
         <Stack direction="horizontal" gap={3} className="d-flex align-items-center">
             <img
-                src={product.imgUrl}
+                src={process.env.PUBLIC_URL + product.imgUrl}
                 style={{ width: "124px", height: "74px", objectFit: "cover" }}
                 alt={product.name}
             />
