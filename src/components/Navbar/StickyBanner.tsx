@@ -24,7 +24,7 @@ export function StickyBanner({ openCart, cartQuantity }: StickyBannerProps) {
             {sticky ? (
                 <div className="w-100 bg-white sticky shadow-sm">
                     <div className="custom-width">
-                        <Container className="custom-width d-flex justify-content-between align-items-center">
+                        <Container className="custom-width d-flex justify-content-center justify-content-sm-between align-items-center">
                             <Nav>
                                 <Nav.Link to={"/"} as={NavLink} className='text-muted d-none d-sm-block'>
                                     Store

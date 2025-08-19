@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import { StoreItem } from "../components/StoreItem"
+import { ProductDetailsModal } from "../components/ProductDetailsModal" // import your modal
 import api from "../api/axios"
 import { useShoppingCart } from "../context/ShoppingCartContext"
 
@@ -17,6 +18,19 @@ type StoreItemType = {
 export function Store() {
     const [storeItems, setStoreItems] = useState<StoreItemType[]>([])
     const { onStoreCheckout } = useShoppingCart()
+
+    // --- Modal State ---
+    const [selectedProduct, setSelectedProduct] = useState<StoreItemType | null>(null)
+    const [showModal, setShowModal] = useState(false)
+
+    const handleProductClick = (product: StoreItemType) => {
+        setSelectedProduct(product)
+        setShowModal(true)
+    }
+    const handleModalClose = () => {
+        setShowModal(false)
+        setSelectedProduct(null)
+    }
 
     const fetchProducts = useCallback(() => {
         api.get("/products").then(res => setStoreItems(res.data))
@@ -42,10 +56,17 @@ export function Store() {
             <Row md={2} xs={1} lg={3} className="g-5">
                 {storeItems.map(item => (
                     <Col key={item.id}>
-                        <StoreItem {...item} />
+                        <div onClick={() => handleProductClick(item)} style={{ cursor: "pointer" }}>
+                            <StoreItem {...item} />
+                        </div>
                     </Col>
                 ))}
             </Row>
+            <ProductDetailsModal
+                show={showModal}
+                onHide={handleModalClose}
+                product={selectedProduct}
+            />
         </section>
     )
 }

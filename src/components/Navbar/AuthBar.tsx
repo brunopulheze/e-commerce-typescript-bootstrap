@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Button, Form } from "react-bootstrap"
 import { useAuth } from "../../context/AuthContext"
+import { AuthModal } from "./AuthModal"
 
 interface UserInfo {
     name: string
@@ -19,9 +20,10 @@ export function AuthBar() {
     const [loginError, setLoginError] = useState("")
     const [registerError, setRegisterError] = useState("")
     const [registerSuccess, setRegisterSuccess] = useState(false)
+    const [showModal, setShowModal] = useState(false)
     const [user, setUser] = useState<UserInfo | null>(null)
 
-    const { token, isLoggedIn, login, logout } = useAuth()
+    const { isLoggedIn, login, logout } = useAuth()
 
     // Manage user info in AuthBar (name/email)
     useEffect(() => {
@@ -48,7 +50,6 @@ export function AuthBar() {
         try {
             // Context login now saves user info in localStorage
             await login(loginForm.email, loginForm.password);
-            // Read user info from localStorage
             const name = localStorage.getItem("name") || loginForm.email.split('@')[0];
             setUser({ name, email: loginForm.email });
             setLoginForm({ email: "", password: "" });
@@ -84,92 +85,111 @@ export function AuthBar() {
     return (
         <div className="w-100" style={{ backgroundColor: "#f7d7da" }}>
             <div className="custom-width d-flex justify-content-center align-items-center my-2" style={{ gap: "1rem", flexWrap: "wrap" }}>
-                {isLoggedIn && user ? (
-                    <>
-                        <span>Welcome, {capitalizeName(user.name)}</span>
-                        <Button variant="outline-secondary" size="sm" onClick={handleLogout}>Logout</Button>
-                    </>
-                ) : (
-                    <>
-                        {!showRegister ? (
-                            <Form onSubmit={handleLogin} className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                <Form.Control
-                                    name="email"
-                                    type="email"
-                                    placeholder="Email"
-                                    value={loginForm.email}
-                                    onChange={handleLoginChange}
-                                    size="sm"
-                                    required
-                                    style={{ width: 140 }}
-                                />
-                                <Form.Control
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={loginForm.password}
-                                    onChange={handleLoginChange}
-                                    size="sm"
-                                    required
-                                    style={{ width: 110 }}
-                                />
-                                <Button type="submit" variant="light" size="sm">Login</Button>
-                                <Button variant="outline-dark" size="sm" onClick={() => setShowRegister(true)} style={{ textDecoration: "none" }}>
-                                    Register
-                                </Button>
-                                {loginError && <span className="text-danger ms-2">{loginError}</span>}
-                            </Form>
-                        ) : (
-                            <Form onSubmit={handleRegister} className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                <Form.Control
-                                    name="name"
-                                    placeholder="Name"
-                                    value={registerForm.name}
-                                    onChange={handleRegisterChange}
-                                    size="sm"
-                                    required
-                                    style={{ width: 100 }}
-                                />
-                                <Form.Control
-                                    name="email"
-                                    type="email"
-                                    placeholder="Email"
-                                    value={registerForm.email}
-                                    onChange={handleRegisterChange}
-                                    size="sm"
-                                    required
-                                    style={{ width: 140 }}
-                                />
-                                <Form.Control
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={registerForm.password}
-                                    onChange={handleRegisterChange}
-                                    size="sm"
-                                    required
-                                    style={{ width: 110 }}
-                                />
-                                <Form.Control
-                                    name="address"
-                                    placeholder="Address"
-                                    value={registerForm.address}
-                                    onChange={handleRegisterChange}
-                                    size="sm"
-                                    required
-                                    style={{ width: 110 }}
-                                />
-                                <Button type="submit" variant="dark" size="sm">Register</Button>
-                                <Button variant="outline-dark" size="sm" onClick={() => setShowRegister(false)} style={{ textDecoration: "none" }}>
-                                    Back to Login
-                                </Button>
-                                {registerError && <span className="text-danger ms-2">{registerError}</span>}
-                                {registerSuccess && <span className="text-success ms-2">Registration successful!</span>}
-                            </Form>
-                        )}
-                    </>
-                )}
+                {/* md+ screens: original logic */}
+                <div className="d-none d-md-flex w-100 justify-content-center" style={{ gap: "1rem", flexWrap: "wrap" }}>
+                    {isLoggedIn && user ? (
+                        <>
+                            <span>Welcome, {capitalizeName(user.name)}</span>
+                            <Button variant="outline-secondary" size="sm" onClick={handleLogout}>Logout</Button>
+                        </>
+                    ) : (
+                        <>
+                            {!showRegister ? (
+                                <Form onSubmit={handleLogin} className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                    <Form.Control
+                                        name="email"
+                                        type="email"
+                                        placeholder="Email"
+                                        value={loginForm.email}
+                                        onChange={handleLoginChange}
+                                        size="sm"
+                                        required
+                                        style={{ width: 140 }}
+                                    />
+                                    <Form.Control
+                                        name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={loginForm.password}
+                                        onChange={handleLoginChange}
+                                        size="sm"
+                                        required
+                                        style={{ width: 110 }}
+                                    />
+                                    <Button type="submit" variant="light" size="sm">Login</Button>
+                                    <Button variant="outline-dark" size="sm" onClick={() => setShowRegister(true)} style={{ textDecoration: "none" }}>
+                                        Register
+                                    </Button>
+                                    {loginError && <span className="text-danger ms-2">{loginError}</span>}
+                                </Form>
+                            ) : (
+                                <Form onSubmit={handleRegister} className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                    <Form.Control
+                                        name="name"
+                                        placeholder="Name"
+                                        value={registerForm.name}
+                                        onChange={handleRegisterChange}
+                                        size="sm"
+                                        required
+                                        style={{ width: 100 }}
+                                    />
+                                    <Form.Control
+                                        name="email"
+                                        type="email"
+                                        placeholder="Email"
+                                        value={registerForm.email}
+                                        onChange={handleRegisterChange}
+                                        size="sm"
+                                        required
+                                        style={{ width: 140 }}
+                                    />
+                                    <Form.Control
+                                        name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={registerForm.password}
+                                        onChange={handleRegisterChange}
+                                        size="sm"
+                                        required
+                                        style={{ width: 110 }}
+                                    />
+                                    <Form.Control
+                                        name="address"
+                                        placeholder="Address"
+                                        value={registerForm.address}
+                                        onChange={handleRegisterChange}
+                                        size="sm"
+                                        required
+                                        style={{ width: 110 }}
+                                    />
+                                    <Button type="submit" variant="dark" size="sm">Register</Button>
+                                    <Button variant="outline-dark" size="sm" onClick={() => setShowRegister(false)} style={{ textDecoration: "none" }}>
+                                        Back to Login
+                                    </Button>
+                                    {registerError && <span className="text-danger ms-2">{registerError}</span>}
+                                    {registerSuccess && <span className="text-success ms-2">Registration successful!</span>}
+                                </Form>
+                            )}
+                        </>
+                    )}
+                </div>
+                {/* sm and below: welcome & logout or login/register triggers */}
+                <div className="d-flex d-md-none w-100 justify-content-center" style={{ gap: "1rem", flexWrap: "wrap" }}>
+                    {isLoggedIn && user ? (
+                        <>
+                            <span>Welcome, {capitalizeName(user.name)}</span>
+                            <Button variant="outline-secondary" size="sm" onClick={handleLogout}>Logout</Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="light" size="sm" onClick={() => setShowModal(true)}>Login</Button>
+                            <Button variant="outline-dark" size="sm" onClick={() => setShowModal(true)}>Register</Button>
+                        </>
+                    )}
+                </div>
             </div>
+            {/* Modal for small screens */}
+            <AuthModal show={showModal} onHide={() => setShowModal(false)} />
         </div>
     )
 }

@@ -20,9 +20,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("token", access_token);
         // Save user info if present
         if (user) {
-            localStorage.setItem("name", user.name);
-            localStorage.setItem("email", user.email);
+            // Save name and email for AuthBar/user display
+            localStorage.setItem("name", user.name || email.split("@")[0]);
+            localStorage.setItem("email", user.email || email);
             if (user.address) localStorage.setItem("address", user.address);
+        } else {
+            // Fallback: save email and derive a name
+            localStorage.setItem("name", email.split("@")[0]);
+            localStorage.setItem("email", email);
         }
     };
 

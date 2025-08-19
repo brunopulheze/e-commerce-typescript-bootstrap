@@ -59,7 +59,10 @@ export function ShoppingCart({ isOpen }: ShoppingCartProps) {
         if (transactionSuccess) {
             return (
                 <div className="w-100 d-flex flex-column align-items-center justify-content-center" style={{ minHeight: "200px" }}>
-                    <div className="fs-4 fw-bold text-success mb-2">Transaction successful</div>
+                    <div className="fs-5 fw-light text-secondary">Thanks for shopping!</div>
+                    <br />
+                    <div className="fs-6 text-muted">Your order will be processed shortly</div>
+                    <div className="fs-6 text-muted">You will be redirected to the homepage.</div>
                 </div>
             )
         }
