@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import { StoreItem } from "../components/StoreItem"
-import { ProductDetailsModal } from "../components/ProductDetailsModal" // import your modal
+import { ProductDetailsModal } from "../components/ProductDetailsModal"
 import api from "../api/axios"
 import { useShoppingCart } from "../context/ShoppingCartContext"
 
@@ -23,7 +23,8 @@ export function Store() {
     const [selectedProduct, setSelectedProduct] = useState<StoreItemType | null>(null)
     const [showModal, setShowModal] = useState(false)
 
-    const handleProductClick = (product: StoreItemType) => {
+    // Handler to be passed down to StoreItem
+    const handleProductImageClick = (product: StoreItemType) => {
         setSelectedProduct(product)
         setShowModal(true)
     }
@@ -56,9 +57,7 @@ export function Store() {
             <Row md={2} xs={1} lg={3} className="g-5">
                 {storeItems.map(item => (
                     <Col key={item.id}>
-                        <div onClick={() => handleProductClick(item)} style={{ cursor: "pointer" }}>
-                            <StoreItem {...item} />
-                        </div>
+                        <StoreItem {...item} onImageClick={() => handleProductImageClick(item)} />
                     </Col>
                 ))}
             </Row>

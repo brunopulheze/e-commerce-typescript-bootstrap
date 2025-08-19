@@ -9,9 +9,18 @@ type StoreItemProps = {
     description: string
     stock: number
     category: string
+    onImageClick?: () => void
 }
 
-export function StoreItem({ id, name, price, imgUrl, description, stock }: StoreItemProps) {
+export function StoreItem({
+    id,
+    name,
+    price,
+    imgUrl,
+    description,
+    stock,
+    onImageClick,
+}: StoreItemProps) {
     const {
         getItemQuantity,
         increaseCartQuantity,
@@ -39,8 +48,18 @@ export function StoreItem({ id, name, price, imgUrl, description, stock }: Store
 
     return (
         <Card className="h-100">
-            <div className="overflow-hidden" style={{ height: '180px' }}>
-                <Card.Img className="hover transition" variant="top" src={process.env.PUBLIC_URL + imgUrl} height="180px" style={{ objectFit: "cover" }} />
+            <div
+                className="overflow-hidden"
+                style={{ height: '180px', cursor: "pointer" }}
+                onClick={onImageClick}
+            >
+                <Card.Img
+                    className="hover transition"
+                    variant="top"
+                    src={process.env.PUBLIC_URL + imgUrl}
+                    height="180px"
+                    style={{ objectFit: "cover" }}
+                />
             </div>
             <Card.Body className="d-flex flex-column">
                 <Card.Title className="d-flex justify-content-between align-items-baseline mb-2">
