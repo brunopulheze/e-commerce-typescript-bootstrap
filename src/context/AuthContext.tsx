@@ -23,7 +23,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // Save name and email for AuthBar/user display
             localStorage.setItem("name", user.name || email.split("@")[0]);
             localStorage.setItem("email", user.email || email);
-            if (user.address) localStorage.setItem("address", user.address);
         } else {
             // Fallback: save email and derive a name
             localStorage.setItem("name", email.split("@")[0]);
@@ -36,7 +35,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem("token");
         localStorage.removeItem("name");
         localStorage.removeItem("email");
-        localStorage.removeItem("address");
     };
 
     const isLoggedIn = !!token;

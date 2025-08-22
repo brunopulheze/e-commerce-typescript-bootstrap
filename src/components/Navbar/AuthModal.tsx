@@ -18,7 +18,7 @@ interface AuthModalProps {
 
 export function AuthModal({ show, onHide }: AuthModalProps) {
     const [loginForm, setLoginForm] = useState({ email: "", password: "" })
-    const [registerForm, setRegisterForm] = useState({ name: "", email: "", password: "", address: "" })
+    const [registerForm, setRegisterForm] = useState({ name: "", email: "", password: "" })
     const [showRegister, setShowRegister] = useState(false)
     const [loginError, setLoginError] = useState("")
     const [registerError, setRegisterError] = useState("")
@@ -48,7 +48,7 @@ export function AuthModal({ show, onHide }: AuthModalProps) {
             setRegisterSuccess(false)
             setJustLoggedIn(false)
             setLoginForm({ email: "", password: "" })
-            setRegisterForm({ name: "", email: "", password: "", address: "" })
+            setRegisterForm({ name: "", email: "", password: "" })
         }
     }, [show])
 
@@ -84,7 +84,7 @@ export function AuthModal({ show, onHide }: AuthModalProps) {
             await register(registerForm)
             setRegisterSuccess(true)
             setShowRegister(false)
-            setRegisterForm({ name: "", email: "", password: "", address: "" })
+            setRegisterForm({ name: "", email: "", password: "" })
             localStorage.setItem("name", registerForm.name)
         } catch (err: any) {
             setRegisterError(err?.response?.data?.detail || "Registration failed.")
@@ -195,16 +195,6 @@ export function AuthModal({ show, onHide }: AuthModalProps) {
                                                     type="password"
                                                     placeholder="Password"
                                                     value={registerForm.password}
-                                                    onChange={handleRegisterChange}
-                                                    size="sm"
-                                                    required
-                                                />
-                                            </Form.Group>
-                                            <Form.Group className="mb-3">
-                                                <Form.Control
-                                                    name="address"
-                                                    placeholder="Address"
-                                                    value={registerForm.address}
                                                     onChange={handleRegisterChange}
                                                     size="sm"
                                                     required

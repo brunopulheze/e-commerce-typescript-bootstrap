@@ -15,7 +15,7 @@ function capitalizeName(name: string) {
 
 export function AuthBar() {
     const [loginForm, setLoginForm] = useState({ email: "", password: "" })
-    const [registerForm, setRegisterForm] = useState({ name: "", email: "", password: "", address: "" })
+    const [registerForm, setRegisterForm] = useState({ name: "", email: "", password: "" })
     const [showRegister, setShowRegister] = useState(false)
     const [loginError, setLoginError] = useState("")
     const [registerError, setRegisterError] = useState("")
@@ -63,12 +63,12 @@ export function AuthBar() {
         setRegisterError("")
         setRegisterSuccess(false)
         try {
-            // registerForm has name, email, password, address
+            // registerForm has name, email, password
             const register = (await import("../../api/auth")).register
             await register(registerForm)
             setRegisterSuccess(true)
             setShowRegister(false)
-            setRegisterForm({ name: "", email: "", password: "", address: "" })
+            setRegisterForm({ name: "", email: "", password: "" })
             localStorage.setItem("name", registerForm.name)
         } catch (err: any) {
             setRegisterError(err?.response?.data?.detail || "Registration failed.")
@@ -153,15 +153,6 @@ export function AuthBar() {
                                         required
                                         style={{ width: 110 }}
                                     />
-                                    <Form.Control
-                                        name="address"
-                                        placeholder="Address"
-                                        value={registerForm.address}
-                                        onChange={handleRegisterChange}
-                                        size="sm"
-                                        required
-                                        style={{ width: 110 }}
-                                    />
                                     <Button type="submit" variant="dark" size="sm">Register</Button>
                                     <Button variant="outline-dark" size="sm" onClick={() => setShowRegister(false)} style={{ textDecoration: "none" }}>
                                         Back to Login
@@ -174,7 +165,7 @@ export function AuthBar() {
                     )}
                 </div>
                 {/* sm and below: welcome & logout or login/register triggers */}
-                <div className="d-flex d-md-none w-100 justify-content-center" style={{ gap: "1rem", flexWrap: "wrap" }}>
+                <div className="d-flex d-md-none w-100 justify-content-center align-items-center" style={{ gap: "1rem", flexWrap: "wrap" }}>
                     {isLoggedIn && user ? (
                         <>
                             <span>Welcome, {capitalizeName(user.name)}</span>
